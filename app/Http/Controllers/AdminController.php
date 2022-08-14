@@ -84,6 +84,10 @@ class AdminController extends Controller
 
     public function usersApi()
     {
-        return User::all();
+        $user = User::all();
+        return response()->json([
+            'status' => true,
+            'users' => $user
+        ], 200);
     }
 }
