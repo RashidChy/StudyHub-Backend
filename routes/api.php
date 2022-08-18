@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\PostApiController;
 
 
 /*
@@ -21,9 +22,17 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
+// Login and Registration
 
 Route::post('/auth/register', [AuthController::class, 'createUser']);
 Route::post('/auth/login', [AuthController::class, 'loginUser']);
 
-Route::get('/adminOperations/user', [AdminController::class, 'usersApi']);#->middleware('auth:sanctum');
+// 
+Route::get('/adminOperations/user', [AdminController::class, 'usersApi']); #->middleware('auth:sanctum');
+
+// All posts
+
+Route::get('/posts/all', [PostApiController::class, 'viewListing']);
+
+
+Route::delete('/posts/{id}', [PostApiController::class, 'destroy'])->middleware('auth:sanctum');
