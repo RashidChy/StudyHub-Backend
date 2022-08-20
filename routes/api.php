@@ -58,6 +58,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // **************************************************
     // sakin, specefic problem id diye specefic post get korar jnne ekta api banaite hbe
+    // example:   Route::get('/post/{id}', [PostApiController::class, 'show']);
     // **************************************************
 
 
