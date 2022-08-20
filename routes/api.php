@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CommentApiController;
 use App\Http\Controllers\PostApiController;
 
 
@@ -27,10 +28,23 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/auth/register', [AuthController::class, 'createUser']);
 Route::post('/auth/login', [AuthController::class, 'loginUser']);
 
-// 
-Route::get('/adminOperations/user', [AdminController::class, 'usersApi']);
 
-// All posts
+// user//
+
+
+Route::get('/adminOperations/user', [AdminController::class, 'usersApi']); // get all users
+
+Route::put('/users/{id}', [AuthController::class, 'updateProfile']); // update user
+
+Route::delete('/users/{id}', [AuthController::class, 'destroyUser']); // delete user
+
+
+
+////
+
+// posts ////
+
+///
 
 Route::get('/posts/all', [PostApiController::class, 'viewListing']);
 
@@ -43,4 +57,14 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::put('/updatePost/{id}', [PostApiController::class, 'update']); // update
 
     Route::delete('/posts/{id}', [PostApiController::class, 'destroy']); // delete
+});
+
+
+// Comments //
+
+Route::group(['middleware' => ['auth:sanctum']], function () {
+
+    Route::get('/comment/{id}', [CommentApiController::class, 'fetch']);
+
+    Route::post('/addComment/{id}', [CommentApiController::class, 'addComment']);
 });

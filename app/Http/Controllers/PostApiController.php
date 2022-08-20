@@ -60,6 +60,10 @@ class PostApiController extends Controller
                 ], 401);
             }
 
+            if ($request->hasFile('pic')) {
+                $pic = $request->file('pic')->store('pictures', 'public');
+            }
+
             /* $user_id= auth()->user()->id; */
 
             $listing = Problem::create([
@@ -67,6 +71,7 @@ class PostApiController extends Controller
                 'email' => $request->email,
                 'tags' => $request->tags,
                 'description' => $request->description,
+                'p_file' => $pic,
                 'user_id' => auth()->user()->id
             ]);
 

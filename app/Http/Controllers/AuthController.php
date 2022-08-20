@@ -112,4 +112,65 @@ class AuthController extends Controller
     {
         return response()->json(auth()->user());
     }
+
+
+    ///profile update///
+
+
+    public function updateProfile(Request $request)
+    {
+        try {
+            //Validated
+            $validateUser = Validator::make(
+                $request->all(),
+                [
+                    'name' => 'required',
+                    'email' => 'required|email'
+                ]
+            );
+
+            if ($validateUser->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validation Error',
+                    'errors' => $validateUser->errors()
+                ], 401);
+            }
+
+            $user = User::whereId($request->id)->first();
+
+            $user->update([
+                'name' => $request->name,
+                'email' => $request->email
+            ]);
+
+
+            return response()->json([
+                'message' => 'Updated Successfully'
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+    public function destroyUser($id)
+    {
+        try {
+            $user = User::whereId($id)->first();
+
+            if ($user->user_id == auth()->user()->id) {
+
+                User::whereId($id)->first()->delete();
+                return response()->json('Deleted');
+            }
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
 }
