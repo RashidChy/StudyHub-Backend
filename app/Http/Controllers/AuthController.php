@@ -29,6 +29,10 @@ class AuthController extends Controller
                 ]
             );
 
+            if ($request->hasFile('pic')) {
+                $pic = $request->file('pic')->store('pictures', 'public');
+            }
+
             if ($validateUser->fails()) {
                 return response()->json([
                     'status' => false,
@@ -37,11 +41,12 @@ class AuthController extends Controller
                 ], 200);
             }
 
-            $user = User::create([
+            User::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-                'type' => "user"
+                'type' => "user",
+                'p_pic' => $pic
             ]);
 
             return response()->json([
@@ -101,5 +106,10 @@ class AuthController extends Controller
                 'message' => $th->getMessage()
             ], 500);
         }
+    }
+
+    public function viewProfile()
+    {
+        return response()->json(auth()->user());
     }
 }

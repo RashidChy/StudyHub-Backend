@@ -24,9 +24,12 @@ class PostApiController extends Controller
     public function destroy($id)
     {
         try {
-            Problem::whereId($id)->first()->delete();
+            $listing = Problem::whereId($id)->first();
 
-            //return response()->json('Deleted');
+            if ($listing->user_id == auth()->user()->id) {
+
+                Problem::whereId($id)->first()->delete();
+            }
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
