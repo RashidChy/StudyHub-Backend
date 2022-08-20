@@ -28,11 +28,19 @@ Route::post('/auth/register', [AuthController::class, 'createUser']);
 Route::post('/auth/login', [AuthController::class, 'loginUser']);
 
 // 
-Route::get('/adminOperations/user', [AdminController::class, 'usersApi']); #->middleware('auth:sanctum');
+Route::get('/adminOperations/user', [AdminController::class, 'usersApi']);
 
 // All posts
 
 Route::get('/posts/all', [PostApiController::class, 'viewListing']);
 
+Route::group(['middleware' => ['auth:sanctum']], function () {
 
-Route::delete('/posts/{id}', [PostApiController::class, 'destroy'])->middleware('auth:sanctum');
+    Route::post('/posts/create', [PostApiController::class, 'create']); // create
+
+    Route::get('/user/posts', [PostApiController::class, 'viewPost']); //  read
+
+    Route::put('/updatePost/{id}', [PostApiController::class, 'update']); // update
+
+    Route::delete('/posts/{id}', [PostApiController::class, 'destroy']); // delete
+});
