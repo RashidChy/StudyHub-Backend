@@ -57,7 +57,7 @@ class PostApiController extends Controller
                     'status' => false,
                     'message' => 'Validation Error',
                     'errors' => $formVal->errors()
-                ], 401);
+                ], 200);
             }
 
             if ($request->hasFile('pic')) {

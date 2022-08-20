@@ -56,6 +56,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::put('/updatePost/{id}', [PostApiController::class, 'update']); // update
 
+    // **************************************************
+    // sakin, specefic problem id diye specefic post get korar jnne ekta api banaite hbe
+    // **************************************************
+
+
     Route::delete('/posts/{id}', [PostApiController::class, 'destroy']); // delete
 });
 

@@ -28,7 +28,6 @@ class AuthController extends Controller
                     'password' => 'required'
                 ]
             );
-
             if ($request->hasFile('pic')) {
                 $pic = $request->file('pic')->store('pictures', 'public');
             }
