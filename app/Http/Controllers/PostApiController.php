@@ -59,7 +59,7 @@ class PostApiController extends Controller
                     'errors' => $formVal->errors()
                 ], 200);
             }
-
+            $pic = 'none';
             if ($request->hasFile('pic')) {
                 $pic = $request->file('pic')->store('pictures', 'public');
             }
