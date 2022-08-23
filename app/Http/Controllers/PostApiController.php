@@ -117,4 +117,19 @@ class PostApiController extends Controller
             return response()->json('Error');
         }
     }
+
+
+    //viewSinglePost
+
+    public function viewSinglePost($id)
+    {
+        $check = Problem::find($id);
+
+        if ($check !== null) {
+            $problem = Problem::find($id)->with('user')->first();
+            return response()->json($problem);
+        } else {
+            return response()->json(['message' => 'No Problem Found']);
+        }
+    }
 }

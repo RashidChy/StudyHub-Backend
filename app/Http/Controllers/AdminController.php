@@ -81,13 +81,4 @@ class AdminController extends Controller
         Session::flash('msg', 'Registered Successfully');
         return redirect('/adminOperations/user');
     }
-
-    public function usersApi()
-    {
-        $user = User::all();
-        return response()->json([
-            'status' => true,
-            'users' => $user
-        ], 200);
-    }
 }

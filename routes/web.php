@@ -95,7 +95,7 @@ Route::get('/adminOperations/user', [AdminController::class, 'users'])->middlewa
 
 Route::get('/adminOperations/posts', [AdminController::class, 'posts'])->middleware('auth');;
 
-Route::get('/adminOperations/addAdmin', [AdminController::class, 'adminRegistration'])->middleware('auth');;
+Route::get('/adminOperations/addAdmin', [AdminController::class, 'adminRegistration'])->middleware('auth');
 
 Route::post('/adminOperations/user', [AdminController::class, 'addAdmin'])->middleware('auth');;
 

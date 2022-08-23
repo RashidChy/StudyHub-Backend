@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Comment;
+use App\Models\Problem;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -16,7 +18,7 @@ class AuthController extends Controller
      * @param Request $request
      * @return User 
      */
-    public function createUser(Request $request)
+    public function createAdmin(Request $request)
     {
         try {
             //Validated
@@ -46,7 +48,7 @@ class AuthController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-                'type' => "user",
+                'type' => "admin",
                 'p_pic' => $pic
             ]);
 
@@ -62,60 +64,49 @@ class AuthController extends Controller
         }
     }
 
-    /**
-     * Login The User
-     * @param Request $request
-     * @return User
-     */
-    public function loginUser(Request $request)
-    {
-        try {
-            $validateUser = Validator::make(
-                $request->all(),
-                [
-                    'email' => 'required|email',
-                    'password' => 'required'
-                ]
-            );
 
-            if ($validateUser->fails()) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'validation error',
-                    'errors' => $validateUser->errors()
-                ], 200);
-            }
 
-            if (!Auth::attempt($request->only(['email', 'password']))) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Email & Password does not match with our record.',
-                ], 200);
-            }
-
-            $user = User::where('email', $request->email)->first();
-
-            return response()->json([
-                'status' => true,
-                'message' => 'User Logged In Successfully',
-                'token' => $user->createToken("API TOKEN")->plainTextToken,
-                'user' => $user
-            ], 200);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'status' => false,
-                'message' => $th->getMessage()
-            ], 500);
-        }
-    }
-
-    public function viewProfile()
+    public function viewAdminProfile()
     {
         return response()->json(auth()->user());
     }
 
 
-    ///profile update///
+    public function viewAllAdmins()
+    {
+        $admins = User::where("type", "admin")->get();
+        return response()->json($admins);
+    }
+
+    public function viewUsers()
+    {
+        $user = User::all();
+        return response()->json([
+            'status' => true,
+            'users' => $user
+        ], 200);
+    }
+
+    public function viewComments()
+    {
+        $comment = Comment::all();
+        return response()->json([
+            'status' => true,
+            'users' => $comment
+        ], 200);
+    }
+
+    public function viewPosts()
+    {
+        $posts = Problem::all();
+        return response()->json([
+            'status' => true,
+            'users' => $posts
+        ], 200);
+    }
+
+
+    ///update Functions///
 
 
     public function updateProfile(Request $request)
@@ -157,15 +148,69 @@ class AuthController extends Controller
         }
     }
 
+    public function updatePost(Request $request)
+    {
+        $listing = Problem::whereId($request->id)->first();
+
+        if ($listing !== null) {
+
+            $listing->update([
+                'title' => $request->title,
+                'tags' => $request->tags,
+                'description' => $request->description
+            ]);
+
+            return response()->json('Success');
+        } else {
+            return response()->json('Error');
+        }
+    }
+
+    // Destroy Functions
+
     public function destroyUser($id)
     {
         try {
             $user = User::whereId($id)->first();
 
-            if ($user->user_id == auth()->user()->id) {
+            if ($user !== null) {
 
                 User::whereId($id)->first()->delete();
                 return response()->json('Deleted');
+            }
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+    public function destroyPost($id)
+    {
+        try {
+            $listing = Problem::whereId($id)->first();
+
+            if ($listing !== null) {
+
+                Problem::whereId($id)->first()->delete();
+            }
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+    public function destroyComment($id)
+    {
+        try {
+            $comment = Comment::whereId($id)->first();
+
+            if ($comment !== null) {
+
+                Comment::whereId($id)->first()->delete();
             }
         } catch (\Throwable $th) {
             return response()->json([

@@ -32,11 +32,11 @@ Route::post('/auth/login', [AuthController::class, 'loginUser']);
 // user//
 
 
-Route::get('/adminOperations/user', [AdminController::class, 'usersApi']); // get all users
+Route::get('/adminOperations/user', [AdminController::class, 'usersApi']); // get all users Admin
 
-Route::put('/users/{id}', [AuthController::class, 'updateProfile']); // update user
+Route::put('/users/{id}', [AuthController::class, 'updateProfile']); // update user (Users + Admin Privilege) 
 
-Route::delete('/users/{id}', [AuthController::class, 'destroyUser']); // delete user
+Route::delete('/users/{id}', [AuthController::class, 'destroyUser']); // delete user (Users + Admin Privilege) 
 
 
 
@@ -46,7 +46,7 @@ Route::delete('/users/{id}', [AuthController::class, 'destroyUser']); // delete 
 
 ///
 
-Route::get('/posts/all', [PostApiController::class, 'viewListing']);
+Route::get('/posts/all', [PostApiController::class, 'viewListing']);  // Public + Admin Privilege
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
 
@@ -56,13 +56,19 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::put('/updatePost/{id}', [PostApiController::class, 'update']); // update
 
+
+
     // **************************************************
     // sakin, specefic problem id diye specefic post get korar jnne ekta api banaite hbe
     // example:   Route::get('/post/{id}', [PostApiController::class, 'show']);
+
+    // dilam
     // **************************************************
 
 
-    Route::delete('/posts/{id}', [PostApiController::class, 'destroy']); // delete
+    Route::get('/user/posts/{id}', [PostApiController::class, 'viewSinglePost']); //  read single post
+
+    Route::delete('user/posts/{id}', [PostApiController::class, 'destroy']); // delete (Users + Admin Privilege) 
 });
 
 
@@ -74,3 +80,27 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::post('/addComment/{id}', [CommentApiController::class, 'addComment']);
 });
+
+
+
+
+// **************ADMIN OPERATIONS**************************
+
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::post('/Admin/create', [AdminApiController::class, 'createAdmin']);
+    Route::get('/Admin/AdminDetails', [AdminApiController::class, 'viewAdminProfile']);
+
+    Route::get('/Admin/allAdmin', [AdminApiController::class, 'viewAllAdmins']);
+    Route::get('/Admin/Users', [AdminApiController::class, 'viewUsers']);
+    Route::get('/Admin/Comments', [AdminApiController::class, 'viewComments']);
+    Route::get('/Admin/Posts', [AdminApiController::class, 'viewPosts']);
+
+    Route::put('/Admin/UpdateUser/{id}', [AdminApiController::class, 'updateProfile']);
+    Route::put('/Admin/UpdatePost/{id}', [AdminApiController::class, 'updatePost']);
+
+    Route::delete('/Admin/DeleteUser/{id}', [AdminApiController::class, 'destroyUser']);
+    Route::delete('/Admin/DeletePost/{id}', [AdminApiController::class, 'destroyPost']);
+    Route::delete('/Admin/DeleteComment/{id}', [AdminApiController::class, 'destroyComment']);
+});
+
+//***************************************************************
