@@ -69,7 +69,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('/user/posts/{id}', [PostApiController::class, 'viewSinglePost']); //  read single post
 
-    Route::delete('user/posts/{id}', [PostApiController::class, 'destroy']); // delete (Users + Admin Privilege) 
+    Route::delete('/user/posts/{id}', [PostApiController::class, 'destroy']); // delete (Users + Admin Privilege) 
 });
 
 

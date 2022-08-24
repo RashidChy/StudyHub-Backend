@@ -191,7 +191,7 @@ class AdminController extends Controller
         $posts = Problem::all();
         return response()->json([
             'status' => true,
-            'users' => $posts
+            'posts' => $posts
         ], 200);
     }
 
