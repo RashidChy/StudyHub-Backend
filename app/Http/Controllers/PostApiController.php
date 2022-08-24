@@ -46,7 +46,6 @@ class PostApiController extends Controller
                 $request->all(),
                 [
                     'title' => 'required|max:100',
-                    'email' => 'required|email|ends_with:.com,.me,.edu',
                     'tags' => 'required',
                     'description' => 'required|max:1000'
                 ]
@@ -68,7 +67,7 @@ class PostApiController extends Controller
 
             $listing = Problem::create([
                 'title' => $request->title,
-                'email' => $request->email,
+                'email' => auth()->user()->email,
                 'tags' => $request->tags,
                 'description' => $request->description,
                 'p_file' => $pic,
