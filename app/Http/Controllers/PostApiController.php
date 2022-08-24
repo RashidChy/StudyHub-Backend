@@ -48,7 +48,7 @@ class PostApiController extends Controller
                     'title' => 'required|max:100',
                     'email' => 'required|email|ends_with:.com,.me,.edu',
                     'tags' => 'required',
-                    'description' => 'required|max:600'
+                    'description' => 'required|max:1000'
                 ]
             );
 

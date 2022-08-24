@@ -23,9 +23,18 @@ class AuthController extends Controller
             $validateUser = Validator::make(
                 $request->all(),
                 [
-                    'name' => 'required',
+                    'name' => 'required|max:20|alpha',
                     'email' => 'required|email|unique:users,email',
-                    'password' => 'required'
+                    'password' => 'required|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/i',
+                    'password2' => 'required|same:password'
+                ],
+                [
+                    "name.required" => "The field is required",
+                    "email.required" => "The field is required",
+                    "password.required" => "The field is required",
+                    "password2.required" => "The field is required",
+                    "password2.same" => "The password doesn't match ",
+                    "name.max" => "Name should not exceed 20 characters"
                 ]
             );
             if ($request->hasFile('pic')) {

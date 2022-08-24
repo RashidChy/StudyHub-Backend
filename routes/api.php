@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+//use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CommentApiController;
 use App\Http\Controllers\PostApiController;
@@ -32,7 +33,7 @@ Route::post('/auth/login', [AuthController::class, 'loginUser']);
 // user//
 
 
-Route::get('/adminOperations/user', [AdminController::class, 'usersApi']); // get all users Admin
+Route::get('/adminOperations/user', [AdminController::class, 'viewUsers']); // get all users Admin
 
 Route::put('/users/{id}', [AuthController::class, 'updateProfile']); // update user (Users + Admin Privilege) 
 
@@ -87,20 +88,20 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 // **************ADMIN OPERATIONS**************************
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::post('/Admin/create', [AdminApiController::class, 'createAdmin']);
-    Route::get('/Admin/AdminDetails', [AdminApiController::class, 'viewAdminProfile']);
+    Route::post('/Admin/create', [AdminController::class, 'createAdmin']);
+    Route::get('/Admin/AdminDetails', [AdminController::class, 'viewAdminProfile']);
 
-    Route::get('/Admin/allAdmin', [AdminApiController::class, 'viewAllAdmins']);
-    Route::get('/Admin/Users', [AdminApiController::class, 'viewUsers']);
-    Route::get('/Admin/Comments', [AdminApiController::class, 'viewComments']);
-    Route::get('/Admin/Posts', [AdminApiController::class, 'viewPosts']);
+    Route::get('/Admin/allAdmin', [AdminController::class, 'viewAllAdmins']);
+    Route::get('/Admin/Users', [AdminController::class, 'viewUsers']);
+    Route::get('/Admin/Comments', [AdminController::class, 'viewComments']);
+    Route::get('/Admin/Posts', [AdminController::class, 'viewPosts']);
 
-    Route::put('/Admin/UpdateUser/{id}', [AdminApiController::class, 'updateProfile']);
-    Route::put('/Admin/UpdatePost/{id}', [AdminApiController::class, 'updatePost']);
+    Route::put('/Admin/UpdateUser/{id}', [AdminController::class, 'updateProfile']);
+    Route::put('/Admin/UpdatePost/{id}', [AdminController::class, 'updatePost']);
 
-    Route::delete('/Admin/DeleteUser/{id}', [AdminApiController::class, 'destroyUser']);
-    Route::delete('/Admin/DeletePost/{id}', [AdminApiController::class, 'destroyPost']);
-    Route::delete('/Admin/DeleteComment/{id}', [AdminApiController::class, 'destroyComment']);
+    Route::delete('/Admin/DeleteUser/{id}', [AdminController::class, 'destroyUser']);
+    Route::delete('/Admin/DeletePost/{id}', [AdminController::class, 'destroyPost']);
+    Route::delete('/Admin/DeleteComment/{id}', [AdminController::class, 'destroyComment']);
 });
 
 //***************************************************************

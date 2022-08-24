@@ -113,7 +113,7 @@ class UserController extends Controller
     public function authenticate(Request $req)
     {
         $formVal = $req->validate([
-            'email' => 'required|email|exists:users,email',
+            'email' => 'required|email',
             'password' => 'required'
         ]);
 
